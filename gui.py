@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 import datetime
 
 master = Tk()
-l = Label(master, text="")
-hr1 = IntVar()
+hr1 = IntVar()  # Deklariranje varijabli za buduce koristenje
 eng1 = IntVar()
 lat1 = IntVar()
 glaz1 = IntVar()
@@ -27,7 +26,7 @@ global prosjek
 prosjek = 0
 
 
-def calc(it):
+def calc(it):  # preko "varijabla.get()"  se dobivaju vrijednosti za tu varijablu
     global hr1, eng1, lat1, glaz1, lik1, pov1, geo1, mat1, fiz1, bio1, inf1, tzk1, vj1, kem1, et1, tal1, soc1, log1, izbor2
     zbroj = hr1.get() + eng1.get() + lat1.get() + glaz1.get() + lik1.get() + pov1.get() + geo1.get() + mat1.get() + fiz1.get() + bio1.get() + inf1.get() + tzk1.get() + vj1.get() + kem1.get() + et1.get() + tal1.get() + soc1.get() + log1.get()
     global prosjek
@@ -41,28 +40,26 @@ def calc(it):
         prosjek1 = str(round(int(zbroj) / (int(p)), 3))
     except ZeroDivisionError:
         prosjek1 = ' '
-    barva = ""
+    boja = ""
     if p == 0:
-        barva = "#ffffff"
-        prosjek2 = Label(master, text="         Prosjek: " + prosjek1 + "         ", bg=barva).place(x=620, y=340)
+        boja = "#ffffff"
+        prosjek2 = Label(master, text="         Prosjek: " + prosjek1 + "         ", bg=boja).place(x=620, y=340)
     else:
-        if (zbroj / p) >= (4.5):
-            barva = "#3bef9b"
+        if (zbroj / p) >= (4.5):  # mijenjanje boja pozadine Labela "prosjek" ovisno o ocjeni
+            boja = "#3bef9b"
         elif (zbroj / p) <= 4.5 and (zbroj / p) > 3.5:
-            barva = "#3befdc"
+            boja = "#3befdc"
         elif (zbroj / p) <= 3.5 and (zbroj / p) > 2.5:
-            barva = "#efe03b"
+            boja = "#efe03b"
         elif (zbroj / p) <= 2.5 and (zbroj / p) > 1.5:
-            barva = "#ce9339"
+            boja = "#ce9339"
         else:
-            barva = "#ff0000"
+            boja = "#ff0000"
 
-    prosjek2 = Label(master, text="         Prosjek: " + prosjek1 + "         ", bg=barva).place(x=620, y=340)
+    prosjek2 = Label(master, text="         Prosjek: " + prosjek1 + "         ", bg=boja).place(x=620, y=340)
 
 
 def graf():
-    # Data to plot
-
     a = 0
     b = 0
     c = 0
@@ -86,12 +83,12 @@ def graf():
         if i == 1:
             e += 1
 
-    labels = ['Odlične ocjene', 'Vrlo dobre ocjene', 'Dobre ocjene ', 'Dovoljne ocjene', 'Nedovoljne ocjene']
+    labels = ['Odlične ocjene', 'Vrlo Dobre ocjene', 'Dobre ocjene ', 'Dovoljne ocjene', 'Nedovoljne ocjene']
     sizes = [a, b, c, d, e]
     colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'red']
     u = 0
     if a == 0:
-        del labels[0]
+        del labels[0]  # ako npr ocjena 5 ne postoji mice se iz liste kako ne bi utjecala na graf
         del sizes[0]
         del colors[0]
         u += 1
@@ -114,14 +111,15 @@ def graf():
         del labels[4 - u]
         del sizes[4 - u]
         del colors[4 - u]
-
+        u += 1
+        # opcije za graf
     plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
 
     plt.axis('equal')
     plt.show()
 
 
-def save():
+def save():  # sve isto kao i graf() samo sto ga ne prikazuje vec sprema u istu mapu u kojoj se kod nalazi
     a = 0
     b = 0
     c = 0
@@ -130,7 +128,7 @@ def save():
     broj = [hr1.get(), eng1.get(), lat1.get(), glaz1.get(), lik1.get(), pov1.get(), geo1.get(), mat1.get(), fiz1.get(),
             bio1.get(), inf1.get(), tzk1.get(), vj1.get(), kem1.get(), et1.get(), tal1.get(), soc1.get(), log1.get()]
     for i in broj:
-        if i == 5:
+        if i == 5:  # broji koliko je ukupno ocjena kako bi se mogao izracunati prosjek
             a += 1
     for i in broj:
         if i == 4:
@@ -150,8 +148,8 @@ def save():
     colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'red']
     u = 0
     if a == 0:
-        del labels[0]
-        del sizes[0]
+        del labels[0]  # u slucaju da jedna ili vise ocjena ne postoje ovako se micu iz liste kako  ne bi
+        del sizes[0]  # utjecele na kod
         del colors[0]
         u += 1
     if b == 0:
@@ -177,12 +175,13 @@ def save():
     plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
 
     plt.axis('equal')
-    ime = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
-    plt.savefig(ime)
+    ime = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")  # za ime spremljene datoteke koristi datum i vrijeme
+    plt.savefig(ime)  # kako bi se izbjeglo brisanje i zamjenjivanje slika
 
 
+master.title("Prosjek")
 backg = PhotoImage(file="backgg.gif")
-master.config(width=800, height=400)
+master.config(width=800, height=400)  # kod za dizajn grafickog sucelja
 backg2 = Label(master, text="", image=backg, bg="white").place(x=0, y=0, relwidth=1, relheight=1)
 hr = Scale(master, from_=0, to=5, bg="white", orient=HORIZONTAL, variable=hr1, command=calc).place(x=200, y=0)
 hr2 = Label(master, text="Hrvatski jezik", bg="white").place(x=0, y=20)
